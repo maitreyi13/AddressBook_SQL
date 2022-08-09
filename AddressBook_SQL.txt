@@ -1,0 +1,277 @@
+Your MySQL connection id is 12
+Server version: 8.0.30 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+___________________________________________________________________UC1__________________________________________________________________________
+
+mysql> CREATE DATABASE addressbook_DB;
+Query OK, 1 row affected (0.09 sec)
+
+mysql> USE addressbook_DB;
+Database changed
+mysql> SELECT DATABASE();
++----------------+
+| DATABASE()     |
++----------------+
+| addressbook_db |
++----------------+
+1 row in set (0.00 sec)
+
+___________________________________________________________________UC2________________________________________________________________________
+
+mysql> CREATE TABLE addressbook_table
+    -> (
+    -> firstName varchar(50) NOT NULL,
+    -> lastName  varchar(50) NOT NULL,
+    -> address varchar(100),
+    -> city varchar(20),
+    -> state varchar(50),
+    -> zip varchar(10),
+    -> phone_number varchar(15),
+    -> email_address varchar(50)
+    -> );
+Query OK, 0 rows affected (0.60 sec)
+
+mysql> Describe addressbook_table
+    -> ;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| firstName     | varchar(50)  | NO   |     | NULL    |       |
+| lastName      | varchar(50)  | NO   |     | NULL    |       |
+| address       | varchar(100) | YES  |     | NULL    |       |
+| city          | varchar(20)  | YES  |     | NULL    |       |
+| state         | varchar(50)  | YES  |     | NULL    |       |
+| zip           | varchar(10)  | YES  |     | NULL    |       |
+| phone_number  | varchar(15)  | YES  |     | NULL    |       |
+| email_address | varchar(50)  | YES  |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+8 rows in set (0.06 sec)
+
+________________________________________________________________UC3_________________________________________________________________________
+
+
+mysql> INSERT INTO addressbook_table ( firstName, lastName, address, city, state, zip, phone_number, email_address) VALUES
+    -> ('Neha','Joshi','Kothrud','Pune','Maharashtra','411005','7845914637','nehaj@gmail.com'),
+    -> ('Aditya','Kulkarni','SB Road','Pune','Maharashtra','411008','7584391574','akulkaeni@yahoo.com'),
+    -> ('Mukta','Tilak','Shaupuri','Satara','Maharashtra','415002','9754739574','Mukutilak@hotmail.com'),
+    -> ('Sujal','Choudhary','Odha','Nashik','Maharashtra','422004','778541574','jagaa@gmail.com');
+Query OK, 4 rows affected (0.21 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM addressbook_table;
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+| firstName | lastName  | address  | city   | state       | zip    | phone_number | email_address         |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+| Neha      | Joshi     | Kothrud  | Pune   | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com       |
+| Aditya    | Kulkarni  | SB Road  | Pune   | Maharashtra | 411008 | 7584391574   | akulkaeni@yahoo.com   |
+| Mukta     | Tilak     | Shaupuri | Satara | Maharashtra | 415002 | 9754739574   | Mukutilak@hotmail.com |
+| Sujal     | Choudhary | Odha     | Nashik | Maharashtra | 422004 | 778541574    | jagaa@gmail.com       |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+4 rows in set (0.00 sec)
+
+_______________________________________________________________UC4____________________________________________________________________________
+
+mysql> UPDATE addressbook_table SET zip = '422001' WHERE firstName = 'Sujal';
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM addressbook_table;
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+| firstName | lastName  | address  | city   | state       | zip    | phone_number | email_address         |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+| Neha      | Joshi     | Kothrud  | Pune   | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com       |
+| Aditya    | Kulkarni  | SB Road  | Pune   | Maharashtra | 411008 | 7584391574   | akulkaeni@yahoo.com   |
+| Mukta     | Tilak     | Shaupuri | Satara | Maharashtra | 415002 | 9754739574   | Mukutilak@hotmail.com |
+| Sujal     | Choudhary | Odha     | Nashik | Maharashtra | 422001 | 778541574    | jagaa@gmail.com       |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+4 rows in set (0.00 sec)
+
+______________________________________________________________UC5_____________________________________________________________________________
+
+mysql> DELETE FROM addressbook_table WHERE firstName = 'Aditya';
+Query OK, 1 row affected (0.10 sec)
+
+mysql> SELECT * FROM addressbook_table;
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+| firstName | lastName  | address  | city   | state       | zip    | phone_number | email_address         |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+| Neha      | Joshi     | Kothrud  | Pune   | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com       |
+| Mukta     | Tilak     | Shaupuri | Satara | Maharashtra | 415002 | 9754739574   | Mukutilak@hotmail.com |
+| Sujal     | Choudhary | Odha     | Nashik | Maharashtra | 422001 | 778541574    | jagaa@gmail.com       |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+
+3 rows in set (0.00 sec)
+_______________________________________________________________UC6___________________________________________________________________________
+
+mysql> SELECT firstName FROM addressbook_table WHERE city = 'satara' OR state = 'Maharashtra';
++-----------+
+| firstName |
++-----------+
+| Neha      |
+| Mukta     |
+| Sujal     |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT firstName FROM addressbook_table WHERE city = 'satara';
++-----------+
+| firstName |
++-----------+
+| Mukta     |
++-----------+
+1 row in set (0.00 sec)
+
+_______________________________________________________________UC7___________________________________________________________________________
+
+mysql>  SELECT state, city, COUNT(firstName) FROM addressbook_table GROUP BY state, city;
++-------------+--------+------------------+
+| state       | city   | COUNT(firstName) |
++-------------+--------+------------------+
+| Maharashtra | Pune   |                1 |
+| Maharashtra | Satara |                1 |
+| Maharashtra | Nashik |                1 |
++-------------+--------+------------------+
+3 rows in set (0.05 sec)
+
+_______________________________________________________________UC8____________________________________________________________________________
+
+mysql> INSERT INTO addressbook_table (firstName, lastName, address, city, state, zip, phone_number, email_address) VALUES
+    -> ('Aditya','Kulkarni','SB Road','Pune','Maharashtra','411008','7584391574','akulkaeni@yahoo.com'),
+    -> ('Manjiri','Purohit','Katraj','Pune','Maharashtra','411005','957834154','manasap@rediffmail.com');
+Query OK, 2 rows affected (0.07 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql>  SELECT * FROM addressbook_table;
++-----------+-----------+----------+--------+-------------+--------+--------------+------------------------+
+| firstName | lastName  | address  | city   | state       | zip    | phone_number | email_address          |
++-----------+-----------+----------+--------+-------------+--------+--------------+------------------------+
+| Neha      | Joshi     | Kothrud  | Pune   | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com        |
+| Mukta     | Tilak     | Shaupuri | Satara | Maharashtra | 415002 | 9754739574   | Mukutilak@hotmail.com  |
+| Sujal     | Choudhary | Odha     | Nashik | Maharashtra | 422001 | 778541574    | jagaa@gmail.com        |
+| Aditya    | Kulkarni  | SB Road  | Pune   | Maharashtra | 411008 | 7584391574   | akulkaeni@yahoo.com    |
+| Manjiri   | Purohit   | Katraj   | Pune   | Maharashtra | 411005 | 957834154    | manasap@rediffmail.com |
++-----------+-----------+----------+--------+-------------+--------+--------------+------------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM addressbook_table WHERE city = 'Pune' ORDER BY firstName;
++-----------+----------+---------+------+-------------+--------+--------------+------------------------+
+| firstName | lastName | address | city | state       | zip    | phone_number | email_address          |
++-----------+----------+---------+------+-------------+--------+--------------+------------------------+
+| Aditya    | Kulkarni | SB Road | Pune | Maharashtra | 411008 | 7584391574   | akulkaeni@yahoo.com    |
+| Manjiri   | Purohit  | Katraj  | Pune | Maharashtra | 411005 | 957834154    | manasap@rediffmail.com |
+| Neha      | Joshi    | Kothrud | Pune | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com        |
++-----------+----------+---------+------+-------------+--------+--------------+------------------------+
+3 rows in set (0.00 sec)
+
+_______________________________________________________________UC9____________________________________________________________________________
+
+mysql> ALTER TABLE addressbook_table ADD COLUMN type varchar(50), ADD bookName varchar(15) NOT NULL ;
+Query OK, 0 rows affected (0.24 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql>  DESCRIBE addressbook_table;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| firstName     | varchar(50)  | NO   |     | NULL    |       |
+| lastName      | varchar(50)  | NO   |     | NULL    |       |
+| address       | varchar(100) | YES  |     | NULL    |       |
+| city          | varchar(20)  | YES  |     | NULL    |       |
+| state         | varchar(50)  | YES  |     | NULL    |       |
+| zip           | varchar(10)  | YES  |     | NULL    |       |
+| phone_number  | varchar(15)  | YES  |     | NULL    |       |
+| email_address | varchar(50)  | YES  |     | NULL    |       |
+| type          | varchar(50)  | YES  |     | NULL    |       |
+| bookName      | varchar(15)  | NO   |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> UPDATE addressbook_table SET bookName = 'One' , type = 'family' WHERE firstName = 'Mukta';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook_table SET bookName = 'Two' , type = 'family' WHERE firstName = 'Sujal';
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook_table SET bookName = 'Two' , type = 'friend' WHERE firstName = 'Aditya';
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook_table SET bookName = 'One' , type = 'friend' WHERE firstName = 'Neha';
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE addressbook_table SET bookName = 'One' , type = 'profession' WHERE firstName = 'Manjiri';
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM addressbook_table;
++-----------+-----------+----------+--------+-------------+--------+--------------+------------------------+------------+----------+
+| firstName | lastName  | address  | city   | state       | zip    | phone_number | email_address          | type       | bookName |
++-----------+-----------+----------+--------+-------------+--------+--------------+------------------------+------------+----------+
+| Neha      | Joshi     | Kothrud  | Pune   | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com        | friend     | One      |
+| Mukta     | Tilak     | Shaupuri | Satara | Maharashtra | 415002 | 9754739574   | Mukutilak@hotmail.com  | family     | One      |
+| Sujal     | Choudhary | Odha     | Nashik | Maharashtra | 422001 | 778541574    | jagaa@gmail.com        | family     | Two      |
+| Aditya    | Kulkarni  | SB Road  | Pune   | Maharashtra | 411008 | 7584391574   | akulkaeni@yahoo.com    | friend     | Two      |
+| Manjiri   | Purohit   | Katraj   | Pune   | Maharashtra | 411005 | 957834154    | manasap@rediffmail.com | profession | One      |
++-----------+-----------+----------+--------+-------------+--------+--------------+------------------------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql>  SELECT * FROM addressbook_table WHERE type = 'family';
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+--------+----------+
+| firstName | lastName  | address  | city   | state       | zip    | phone_number | email_address         | type   | bookName |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+--------+----------+
+| Mukta     | Tilak     | Shaupuri | Satara | Maharashtra | 415002 | 9754739574   | Mukutilak@hotmail.com | family | One      |
+| Sujal     | Choudhary | Odha     | Nashik | Maharashtra | 422001 | 778541574    | jagaa@gmail.com       | family | Two      |
++-----------+-----------+----------+--------+-------------+--------+--------------+-----------------------+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql>  SELECT * FROM addressbook_table WHERE type = 'friend';
++-----------+----------+---------+------+-------------+--------+--------------+---------------------+--------+----------+
+| firstName | lastName | address | city | state       | zip    | phone_number | email_address       | type   | bookName |
++-----------+----------+---------+------+-------------+--------+--------------+---------------------+--------+----------+
+| Neha      | Joshi    | Kothrud | Pune | Maharashtra | 411005 | 7845914637   | nehaj@gmail.com     | friend | One      |
+| Aditya    | Kulkarni | SB Road | Pune | Maharashtra | 411008 | 7584391574   | akulkaeni@yahoo.com | friend | Two      |
++-----------+----------+---------+------+-------------+--------+--------------+---------------------+--------+----------+
+2 rows in set (0.00 sec)
+
+mysql>  SELECT * FROM addressbook_table WHERE type = 'profession';
++-----------+----------+---------+------+-------------+--------+--------------+------------------------+------------+----------+
+| firstName | lastName | address | city | state       | zip    | phone_number | email_address          | type       | bookName |
++-----------+----------+---------+------+-------------+--------+--------------+------------------------+------------+----------+
+| Manjiri   | Purohit  | Katraj  | Pune | Maharashtra | 411005 | 957834154    | manasap@rediffmail.com | profession | One      |
++-----------+----------+---------+------+-------------+--------+--------------+------------------------+------------+----------+
+1 row in set (0.00 sec)
+
+_______________________________________________________________UC10____________________________________________________________________________
+
+mysql> SELECT COUNT(firstName) FROM addressBook_table WHERE type ='family';
++------------------+
+| COUNT(firstName) |
++------------------+
+|                2 |
++------------------+
+1 row in set (0.03 sec)
+
+mysql> SELECT COUNT(firstName) FROM addressBook_table WHERE type ='friend';
++------------------+
+| COUNT(firstName) |
++------------------+
+|                2 |
++------------------+
+1 row in set (0.00 sec)
+
+________________________________________________________________________________________________________________________________________________
+
+
+
+
+
