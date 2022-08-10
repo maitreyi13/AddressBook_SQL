@@ -268,10 +268,22 @@ mysql> SELECT COUNT(firstName) FROM addressBook_table WHERE type ='friend';
 |                2 |
 +------------------+
 1 row in set (0.00 sec)
+______________________________________________________________UC12______________________________________________________________________________
 
-________________________________________________________________________________________________________________________________________________
+mysql> CREATE TABLE person
+    -> (person_id INT NOT NULL,
+    -> firstName varchar(50) NOT NULL,
+    -> PRIMARY KEY(person_id),
+    -> FOREIGN KEY(firstName) REFERENCES addressbook_table(firstName)
+    -> );
+Query OK, 0 rows affected (0.23 sec)
 
+mysql> CREATE TABLE location
+    -> (city_id INT NOT NULL,
+    -> city varchar(20),
+    ->  PRIMARY KEY(city_id),
+    ->  FOREIGN KEY(city) REFERENCES addressbook_table(city)
+    -> );
+Query OK, 0 rows affected (0.28 sec)
 
-
-
-
+____________________________________________________________________________________________________________________________________________
